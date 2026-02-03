@@ -13,9 +13,9 @@ namespace Sadkah.Backend.Data
         {
         }
 
-        public DbSet<User> User { get; set; }
-        public DbSet<Campaign> Campaign { get; set; }
-        public DbSet<Donation> Donation { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Donation> Donations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
