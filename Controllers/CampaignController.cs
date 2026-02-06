@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sadkah.Backend.Data;
+using Sadkah.Backend.Mappers;
 
 namespace Sadkah.Backend.Controllers
 {
@@ -20,8 +21,16 @@ namespace Sadkah.Backend.Controllers
         [HttpGet]
         public IActionResult GetAllCampaigns()
         {
-            var campaigns = _context.Campaigns.ToList();
+            var campaigns = _context.Campaigns.Include(c => c.Owner).ToList().Select(c => c.ToCampaignDto());
             return Ok(campaigns);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCampaignById([FromRoute] int id)
+        {
+            var campaign = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == id);
+            if (campaign == null) return NotFound();
+            return Ok(campaign.ToCampaignDto());
         }
     }
 }
