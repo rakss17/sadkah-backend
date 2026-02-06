@@ -12,8 +12,8 @@ using Sadkah.Backend.Data;
 namespace Sadkah.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260128113949_init")]
-    partial class init
+    [Migration("20260206092744_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Campaign");
+                    b.ToTable("Campaigns");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Donation", b =>
@@ -111,7 +111,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasIndex("DonorId");
 
-                    b.ToTable("Donation");
+                    b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.User", b =>
@@ -155,7 +155,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sadkah.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -29,11 +29,11 @@ namespace Sadkah.Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Campaign",
+                name: "Campaigns",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -52,17 +52,17 @@ namespace Sadkah.Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Campaign", x => x.Id);
+                    table.PrimaryKey("PK_Campaigns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Campaign_User_OwnerId",
+                        name: "FK_Campaigns_Users_OwnerId",
                         column: x => x.OwnerId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donation",
+                name: "Donations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -77,34 +77,34 @@ namespace Sadkah.Backend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Donation", x => x.Id);
+                    table.PrimaryKey("PK_Donations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Donation_Campaign_CampaignId",
+                        name: "FK_Donations_Campaigns_CampaignId",
                         column: x => x.CampaignId,
-                        principalTable: "Campaign",
+                        principalTable: "Campaigns",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Donation_User_DonorId",
+                        name: "FK_Donations_Users_DonorId",
                         column: x => x.DonorId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campaign_OwnerId",
-                table: "Campaign",
+                name: "IX_Campaigns_OwnerId",
+                table: "Campaigns",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donation_CampaignId",
-                table: "Donation",
+                name: "IX_Donations_CampaignId",
+                table: "Donations",
                 column: "CampaignId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donation_DonorId",
-                table: "Donation",
+                name: "IX_Donations_DonorId",
+                table: "Donations",
                 column: "DonorId");
         }
 
@@ -112,13 +112,13 @@ namespace Sadkah.Backend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Donation");
+                name: "Donations");
 
             migrationBuilder.DropTable(
-                name: "Campaign");
+                name: "Campaigns");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

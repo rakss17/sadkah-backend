@@ -69,7 +69,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Campaign");
+                    b.ToTable("Campaigns");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Donation", b =>
@@ -108,7 +108,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasIndex("DonorId");
 
-                    b.ToTable("Donation");
+                    b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.User", b =>
@@ -152,7 +152,7 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>
