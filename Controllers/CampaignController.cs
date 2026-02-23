@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sadkah.Backend.Data;
+using Sadkah.Backend.Dtos.Campaign;
 using Sadkah.Backend.Mappers;
 
 namespace Sadkah.Backend.Controllers
@@ -32,5 +33,24 @@ namespace Sadkah.Backend.Controllers
             if (campaign == null) return NotFound();
             return Ok(campaign.ToCampaignDto());
         }
+
+        [HttpPost]
+        public IActionResult CreateCampaign([FromBody] CreateCampaignRequestDto createDto)
+        {
+            var campaign = createDto.ToCampaignFromCreateDto();
+            _context.Campaigns.Add(campaign);
+            _context.SaveChanges();
+
+            var createdCampaign = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == campaign.Id);
+
+            if (createdCampaign == null) return NotFound();
+
+            return CreatedAtAction(
+                nameof(GetCampaignById),
+                new { id = createdCampaign.Id },
+                createdCampaign.ToCampaignDto()
+            );
+        }
+
     }
 }

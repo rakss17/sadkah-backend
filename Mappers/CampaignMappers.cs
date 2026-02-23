@@ -24,5 +24,19 @@ namespace Sadkah.Backend.Mappers
                 OwnerName = campaignModel.Owner != null ? $"{campaignModel.Owner.FirstName} {campaignModel.Owner.LastName}" : "Unknown User"
             };
         }
+
+        public static Campaign ToCampaignFromCreateDto(this CreateCampaignRequestDto createDto)
+        {
+            return new Campaign
+            {
+                OwnerId = createDto.OwnerId,
+                Title = createDto.Title,
+                Description = createDto.Description,
+                TargetAmount = createDto.TargetAmount,
+                Deadline = createDto.Deadline,
+                Status = Enums.CampaignStatus.Active,
+                IsVerified = false,
+            };
+        }
     }
 }
