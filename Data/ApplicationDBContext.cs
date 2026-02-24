@@ -20,6 +20,9 @@ namespace Sadkah.Backend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Campaign>()
+                .HasQueryFilter(c => c.DeletedAt == null);
+                
+            modelBuilder.Entity<Campaign>()
                 .HasOne(c => c.Owner)
                 .WithMany(u => u.Campaigns)
                 .HasForeignKey(c => c.OwnerId)

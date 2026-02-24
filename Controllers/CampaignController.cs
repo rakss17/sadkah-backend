@@ -70,5 +70,16 @@ namespace Sadkah.Backend.Controllers
             return Ok(campaignModel.ToCampaignDto());
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCampaign([FromRoute] int id)
+        {
+            var campaignModel = _context.Campaigns.FirstOrDefault(c => c.Id == id);
+            if (campaignModel == null) return NotFound();
+
+            campaignModel.DeletedAt = DateTime.UtcNow;
+            _context.SaveChanges();
+
+            return NoContent();
+        }
     }
 }
