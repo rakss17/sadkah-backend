@@ -52,5 +52,23 @@ namespace Sadkah.Backend.Controllers
             );
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
+        {
+            var campaignModel = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == id);
+
+            if (campaignModel == null) return NotFound();
+
+            campaignModel.Title = updateDto.Title ?? campaignModel.Title;
+            campaignModel.OwnerId = updateDto.OwnerId ?? campaignModel.OwnerId;
+            campaignModel.Description = updateDto.Description ?? campaignModel.Description;
+            campaignModel.TargetAmount = updateDto.TargetAmount ?? campaignModel.TargetAmount;
+            campaignModel.Deadline = updateDto.Deadline ?? campaignModel.Deadline;
+
+            _context.SaveChanges();
+
+            return Ok(campaignModel.ToCampaignDto());
+        }
+
     }
 }
