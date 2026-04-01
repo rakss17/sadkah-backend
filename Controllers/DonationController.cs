@@ -23,6 +23,14 @@ namespace Sadkah.Backend.Controllers
         {
             var donations = _context.Donations.Include(d => d.Donor).ToList().Select(d => d.ToDonationDto());
             return Ok(donations);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetDonationById([FromRoute] int id)
+        {
+            var donation = _context.Donations.Include(d => d.Donor).FirstOrDefault(d => d.Id == id);
+            if (donation == null) return NotFound();
+            return Ok(donation.ToDonationDto());
         }    
     }
 }
