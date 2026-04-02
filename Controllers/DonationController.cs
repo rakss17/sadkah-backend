@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sadkah.Backend.Data;
+using Sadkah.Backend.Dtos.Donation;
 using Sadkah.Backend.Mappers;
 
 namespace Sadkah.Backend.Controllers
@@ -31,6 +32,24 @@ namespace Sadkah.Backend.Controllers
             var donation = _context.Donations.Include(d => d.Donor).FirstOrDefault(d => d.Id == id);
             if (donation == null) return NotFound();
             return Ok(donation.ToDonationDto());
-        }    
+        }
+
+        [HttpPost]
+        public IActionResult CreateDonation([FromBody] CreateDonationRequestDto createDto)
+        {
+            var donation = createDto.ToDonationFromCreateDto();
+            _context.Donations.Add(donation);
+            _context.SaveChanges();
+
+            var createdDonation = _context.Donations.Include(d => d.Donor).FirstOrDefault(d => d.Id == donation.Id);
+
+            if (createdDonation == null) return NotFound();
+
+            return CreatedAtAction(
+                nameof(GetDonationById),
+                new { id = createdDonation.Id },
+                createdDonation.ToDonationDto()
+            ); 
+        }   
     }
 }

@@ -23,5 +23,17 @@ namespace Sadkah.Backend.Mappers
                 CreatedAt = donationModel.CreatedAt
             };
         }
+
+        public static Donation ToDonationFromCreateDto(this CreateDonationRequestDto createDto)
+        {
+            return new Donation
+            {
+                DonorId = createDto.DonorId,
+                CampaignId = createDto.CampaignId,
+                Amount = createDto.Amount,
+                IsAnonymous = createDto.IsAnonymous,
+                PaymentReference = createDto.PaymentReference
+            };
+        }
     }
 }
