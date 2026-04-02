@@ -50,6 +50,19 @@ namespace Sadkah.Backend.Controllers
                 new { id = createdDonation.Id },
                 createdDonation.ToDonationDto()
             ); 
+        }
+
+        [HttpPut("{id}/anonymous")]
+        public IActionResult UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
+        {
+            var donationModel = _context.Donations.FirstOrDefault(d => d.Id == id);
+
+            if (donationModel == null) return NotFound();
+
+            donationModel.IsAnonymous = updateDto.IsAnonymous;
+            _context.SaveChanges();
+
+            return Ok(new { message = "Donation anonymous status updated successfully." });
         }   
     }
 }
