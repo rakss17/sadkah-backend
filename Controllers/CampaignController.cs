@@ -20,28 +20,29 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllCampaigns()
+        public async Task<IActionResult> GetAllCampaigns()
         {
-            var campaigns = _context.Campaigns.Include(c => c.Owner).ToList().Select(c => c.ToCampaignDto());
-            return Ok(campaigns);
+            var campaigns = await _context.Campaigns.Include(c => c.Owner).ToListAsync();
+            var campaignDtos = campaigns.Select(c => c.ToCampaignDto());
+            return Ok(campaignDtos);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCampaignById([FromRoute] int id)
+        public async Task<IActionResult> GetCampaignById([FromRoute] int id)
         {
-            var campaign = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == id);
+            var campaign = await _context.Campaigns.Include(c => c.Owner).FirstOrDefaultAsync(c => c.Id == id);
             if (campaign == null) return NotFound();
             return Ok(campaign.ToCampaignDto());
         }
 
         [HttpPost]
-        public IActionResult CreateCampaign([FromBody] CreateCampaignRequestDto createDto)
+        public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignRequestDto createDto)
         {
             var campaign = createDto.ToCampaignFromCreateDto();
-            _context.Campaigns.Add(campaign);
-            _context.SaveChanges();
+            await _context.Campaigns.AddAsync(campaign);
+            await _context.SaveChangesAsync();
 
-            var createdCampaign = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == campaign.Id);
+            var createdCampaign = await _context.Campaigns.Include(c => c.Owner).FirstOrDefaultAsync(c => c.Id == campaign.Id);
 
             if (createdCampaign == null) return NotFound();
 
@@ -53,9 +54,9 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
+        public async Task<IActionResult> UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
         {
-            var campaignModel = _context.Campaigns.Include(c => c.Owner).FirstOrDefault(c => c.Id == id);
+            var campaignModel = await _context.Campaigns.Include(c => c.Owner).FirstOrDefaultAsync(c => c.Id == id);
 
             if (campaignModel == null) return NotFound();
 
@@ -65,19 +66,19 @@ namespace Sadkah.Backend.Controllers
             campaignModel.TargetAmount = updateDto.TargetAmount ?? campaignModel.TargetAmount;
             campaignModel.Deadline = updateDto.Deadline ?? campaignModel.Deadline;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(campaignModel.ToCampaignDto());
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCampaign([FromRoute] int id)
+        public async Task<IActionResult> DeleteCampaign([FromRoute] int id)
         {
-            var campaignModel = _context.Campaigns.FirstOrDefault(c => c.Id == id);
+            var campaignModel = await _context.Campaigns.FirstOrDefaultAsync(c => c.Id == id);
             if (campaignModel == null) return NotFound();
 
             campaignModel.DeletedAt = DateTime.UtcNow;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

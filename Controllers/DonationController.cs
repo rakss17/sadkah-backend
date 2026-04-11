@@ -20,28 +20,28 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllDonations()
+        public async Task<IActionResult> GetAllDonations()
         {
-            var donations = _context.Donations.Include(d => d.Donor).ToList().Select(d => d.ToDonationDto());
+            var donations = await _context.Donations.Include(d => d.Donor).ToListAsync();
             return Ok(donations);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetDonationById([FromRoute] int id)
+        public async Task<IActionResult> GetDonationById([FromRoute] int id)
         {
-            var donation = _context.Donations.Include(d => d.Donor).FirstOrDefault(d => d.Id == id);
+            var donation = await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == id);
             if (donation == null) return NotFound();
             return Ok(donation.ToDonationDto());
         }
 
         [HttpPost]
-        public IActionResult CreateDonation([FromBody] CreateDonationRequestDto createDto)
+        public async Task<IActionResult> CreateDonation([FromBody] CreateDonationRequestDto createDto)
         {
             var donation = createDto.ToDonationFromCreateDto();
-            _context.Donations.Add(donation);
-            _context.SaveChanges();
+            await _context.Donations.AddAsync(donation);
+            await _context.SaveChangesAsync();
 
-            var createdDonation = _context.Donations.Include(d => d.Donor).FirstOrDefault(d => d.Id == donation.Id);
+            var createdDonation = await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == donation.Id);
 
             if (createdDonation == null) return NotFound();
 
@@ -53,14 +53,14 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPut("{id}/anonymous")]
-        public IActionResult UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
+        public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
         {
-            var donationModel = _context.Donations.FirstOrDefault(d => d.Id == id);
+            var donationModel = await _context.Donations.FirstOrDefaultAsync(d => d.Id == id);
 
             if (donationModel == null) return NotFound();
 
             donationModel.IsAnonymous = updateDto.IsAnonymous;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(new { message = "Donation anonymous status updated successfully." });
         }   
