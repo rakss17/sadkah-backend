@@ -1,4 +1,6 @@
 using Sadkah.Backend.Data;
+using Sadkah.Backend.Interfaces;
+using Sadkah.Backend.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDBContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
 
 var app = builder.Build();
 

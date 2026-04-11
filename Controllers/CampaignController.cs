@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Sadkah.Backend.Data;
 using Sadkah.Backend.Dtos.Campaign;
 using Sadkah.Backend.Mappers;
+using Sadkah.Backend.Interfaces;
 
 namespace Sadkah.Backend.Controllers
 {
@@ -14,15 +15,17 @@ namespace Sadkah.Backend.Controllers
     public class CampaignsController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public CampaignsController(ApplicationDBContext context)
+        private readonly ICampaignRepository _campaignRepository;
+        public CampaignsController(ApplicationDBContext context, ICampaignRepository campaignRepository)
         {
             _context = context;
+            _campaignRepository = campaignRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllCampaigns()
         {
-            var campaigns = await _context.Campaigns.Include(c => c.Owner).ToListAsync();
+            var campaigns = await _campaignRepository.GetAllCampaignsAsync();
             var campaignDtos = campaigns.Select(c => c.ToCampaignDto());
             return Ok(campaignDtos);
         }
