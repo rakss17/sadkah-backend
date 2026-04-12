@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sadkah.Backend.Data;
 using Sadkah.Backend.Interfaces;
 using Sadkah.Backend.Models;
 
@@ -9,24 +10,41 @@ namespace Sadkah.Backend.Repository
 {
     public class DonationRepository : IDonationRepository
     {
-        public Task<List<Donation>> GetAllDonationsAsync()
+        private readonly ApplicationDBContext _context;
+        public DonationRepository(ApplicationDBContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<Donation?> GetDonationByIdAsync(int id)
+        public async Task<List<Donation>> GetAllDonationsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Donations.Include(d => d.Donor).ToListAsync();
         }
 
-        public Task<Donation> CreateDonationAsync(Donation donation)
+        public async Task<Donation?> GetDonationByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public Task<Donation?> UpdateAnonymousDonationAsync(int id, bool isAnonymous)
+        public async Task<Donation> CreateDonationAsync(Donation donation)
         {
-            throw new NotImplementedException();
+            await _context.Donations.AddAsync(donation);
+            await _context.SaveChangesAsync();
+
+            var createdDonation = await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == donation.Id);
+
+            return createdDonation!;
+        }
+
+        public async Task<Donation?> UpdateAnonymousDonationAsync(int id, bool isAnonymous)
+        {
+            var donationModel = await _context.Donations.FirstOrDefaultAsync(d => d.Id == id);
+
+            if (donationModel == null) return null;
+
+            donationModel.IsAnonymous = isAnonymous;
+            await _context.SaveChangesAsync();
+            return donationModel;
         }
     }
 }

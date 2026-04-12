@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Sadkah.Backend.Data;
 using Sadkah.Backend.Dtos.Donation;
+using Sadkah.Backend.Interfaces;
 using Sadkah.Backend.Mappers;
 
 namespace Sadkah.Backend.Controllers
@@ -14,22 +15,24 @@ namespace Sadkah.Backend.Controllers
     public class DonationsController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
-        public DonationsController(ApplicationDBContext context)
+        private readonly IDonationRepository _donationRepository;
+        public DonationsController(ApplicationDBContext context, IDonationRepository donationRepository)
         {
             _context = context;
+            _donationRepository = donationRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllDonations()
         {
-            var donations = await _context.Donations.Include(d => d.Donor).ToListAsync();
+            var donations = await _donationRepository.GetAllDonationsAsync();
             return Ok(donations);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDonationById([FromRoute] int id)
         {
-            var donation = await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == id);
+            var donation = await _donationRepository.GetDonationByIdAsync(id);
             if (donation == null) return NotFound();
             return Ok(donation.ToDonationDto());
         }
@@ -38,10 +41,7 @@ namespace Sadkah.Backend.Controllers
         public async Task<IActionResult> CreateDonation([FromBody] CreateDonationRequestDto createDto)
         {
             var donation = createDto.ToDonationFromCreateDto();
-            await _context.Donations.AddAsync(donation);
-            await _context.SaveChangesAsync();
-
-            var createdDonation = await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == donation.Id);
+            var createdDonation = await _donationRepository.CreateDonationAsync(donation);
 
             if (createdDonation == null) return NotFound();
 
@@ -55,12 +55,9 @@ namespace Sadkah.Backend.Controllers
         [HttpPut("{id}/anonymous")]
         public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
         {
-            var donationModel = await _context.Donations.FirstOrDefaultAsync(d => d.Id == id);
+            var updatedDonation = await _donationRepository.UpdateAnonymousDonationAsync(id, updateDto.IsAnonymous);
 
-            if (donationModel == null) return NotFound();
-
-            donationModel.IsAnonymous = updateDto.IsAnonymous;
-            await _context.SaveChangesAsync();
+            if (updatedDonation == null) return NotFound();
 
             return Ok(new { message = "Donation anonymous status updated successfully." });
         }   
