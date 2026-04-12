@@ -14,6 +14,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => {
 });
 
 builder.Services.AddScoped<ICampaignRepository, CampaignRepository>();
+builder.Services.AddScoped<IDonationRepository, DonationRepository>();
 
 var app = builder.Build();
 

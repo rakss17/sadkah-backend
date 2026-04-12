@@ -14,11 +14,9 @@ namespace Sadkah.Backend.Controllers
     [ApiController]
     public class CampaignsController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
         private readonly ICampaignRepository _campaignRepository;
-        public CampaignsController(ApplicationDBContext context, ICampaignRepository campaignRepository)
+        public CampaignsController(ICampaignRepository campaignRepository)
         {
-            _context = context;
             _campaignRepository = campaignRepository;
         }
 

@@ -14,11 +14,9 @@ namespace Sadkah.Backend.Controllers
     [ApiController]
     public class DonationsController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
         private readonly IDonationRepository _donationRepository;
-        public DonationsController(ApplicationDBContext context, IDonationRepository donationRepository)
+        public DonationsController(IDonationRepository donationRepository)
         {
-            _context = context;
             _donationRepository = donationRepository;
         }
 
