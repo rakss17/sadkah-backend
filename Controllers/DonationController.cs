@@ -11,9 +11,11 @@ namespace Sadkah.Backend.Controllers
     public class DonationsController : ControllerBase
     {
         private readonly IDonationRepository _donationRepository;
-        public DonationsController(IDonationRepository donationRepository)
+        private readonly ICampaignRepository _campaignRepository;
+        public DonationsController(IDonationRepository donationRepository, ICampaignRepository campaignRepository)
         {
             _donationRepository = donationRepository;
+            _campaignRepository = campaignRepository;
         }
 
         [HttpGet]
@@ -35,6 +37,10 @@ namespace Sadkah.Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDonation([FromBody] CreateDonationRequestDto createDto)
         {
+            var isCampaignExisting = await _campaignRepository.IsCampaignExistingAsync(createDto.CampaignId);
+
+            if (!isCampaignExisting) return BadRequest(new { message = "Campaign does not exist." });
+
             var donation = createDto.ToDonationFromCreateDto();
             var createdDonation = await _donationRepository.CreateDonationAsync(donation);
 
