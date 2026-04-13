@@ -20,7 +20,8 @@ namespace Sadkah.Backend.Controllers
         public async Task<IActionResult> GetAllDonations()
         {
             var donations = await _donationRepository.GetAllDonationsAsync();
-            return Ok(donations);
+            var donationDtos = donations.Select(d => d.ToDonationDto());
+            return Ok(donationDtos);
         }
 
         [HttpGet("{id}")]
