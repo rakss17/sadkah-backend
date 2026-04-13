@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sadkah.Backend.Data;
-using Sadkah.Backend.Dtos.Campaign;
-using Sadkah.Backend.Interfaces;
-using Sadkah.Backend.Models;
 
 namespace Sadkah.Backend.Repository
 {

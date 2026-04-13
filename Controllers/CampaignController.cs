@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Sadkah.Backend.Data;
-using Sadkah.Backend.Dtos.Campaign;
-using Sadkah.Backend.Mappers;
-using Sadkah.Backend.Interfaces;
 
 namespace Sadkah.Backend.Controllers
 {
