@@ -63,5 +63,10 @@ namespace Sadkah.Backend.Repository
             return campaign;
 
         }
+
+        public async Task<bool> IsCampaignExistingAsync(int id)
+        {
+            return await _context.Campaigns.AnyAsync(c => c.Id == id);
+        }
     }
 }
