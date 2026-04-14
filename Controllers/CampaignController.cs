@@ -24,7 +24,7 @@ namespace Sadkah.Backend.Controllers
             return Ok(campaignDtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetCampaignById([FromRoute] int id)
         {
             var campaign = await _campaignRepository.GetCampaignByIdAsync(id);
@@ -48,7 +48,7 @@ namespace Sadkah.Backend.Controllers
             );
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
         {
             var updatedCampaign = await _campaignRepository.UpdateCampaignAsync(id, updateDto);
@@ -58,7 +58,7 @@ namespace Sadkah.Backend.Controllers
             return Ok(updatedCampaign.ToCampaignFromUpdateResponseDto());
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCampaign([FromRoute] int id)
         {
             var deletedCampaign = await _campaignRepository.DeleteCampaignAsync(id);
