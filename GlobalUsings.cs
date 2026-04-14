@@ -1,4 +1,5 @@
 global using Microsoft.EntityFrameworkCore;
+global using System.Text.Json;
 
 global using Sadkah.Backend.Models;
 global using Sadkah.Backend.Data;

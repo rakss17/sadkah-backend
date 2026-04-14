@@ -55,7 +55,7 @@ namespace Sadkah.Backend.Controllers
 
             if (updatedCampaign == null) return NotFound();
 
-            return Ok(updatedCampaign.ToCampaignDto());
+            return Ok(updatedCampaign.ToCampaignFromUpdateResponseDto());
         }
 
         [HttpDelete("{id}")]

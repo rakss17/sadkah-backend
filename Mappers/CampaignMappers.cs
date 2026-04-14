@@ -37,5 +37,17 @@ namespace Sadkah.Backend.Mappers
                 IsVerified = false,
             };
         }
+
+        public static UpdateCampaignRequestDto ToCampaignFromUpdateResponseDto(this Campaign campaign)
+        {
+            return new UpdateCampaignRequestDto
+            {
+                OwnerId = campaign.OwnerId,
+                Title = campaign.Title,
+                Description = campaign.Description,
+                TargetAmount = campaign.TargetAmount,
+                Deadline = campaign.Deadline,
+            };
+        }
     }
 }
