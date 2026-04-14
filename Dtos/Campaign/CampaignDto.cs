@@ -16,5 +16,6 @@ namespace Sadkah.Backend.Dtos.Campaign
         public CampaignStatus Status { get; set; }
         public bool IsVerified { get; set; }
         public string OwnerName { get; set; } = string.Empty;
+        public List<DonationDto> Donations { get; set; } = new ();
     }
 }

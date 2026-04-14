@@ -35,7 +35,7 @@ namespace Sadkah.Backend.Data
 
             modelBuilder.Entity<Donation>()
                 .HasOne(d => d.Campaign)
-                .WithMany()
+                .WithMany(c => c.Donations)
                 .HasForeignKey(d => d.CampaignId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

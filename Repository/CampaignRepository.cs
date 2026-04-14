@@ -15,12 +15,12 @@ namespace Sadkah.Backend.Repository
 
         public async Task<List<Campaign>> GetAllCampaignsAsync()
         {
-            return await _context.Campaigns.Include(c => c.Owner).ToListAsync();
+            return await _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).ToListAsync();
         }
 
         public async Task<Campaign?> GetCampaignByIdAsync(int id)
         {
-            return await _context.Campaigns.Include(c => c.Owner).FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<Campaign> CreateCampaignAsync(Campaign campaignModel)

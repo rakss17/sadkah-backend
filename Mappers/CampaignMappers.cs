@@ -19,7 +19,8 @@ namespace Sadkah.Backend.Mappers
                 Deadline = campaignModel.Deadline,
                 Status = campaignModel.Status,
                 IsVerified = campaignModel.IsVerified,
-                OwnerName = campaignModel.Owner != null ? $"{campaignModel.Owner.FirstName} {campaignModel.Owner.LastName}" : "Unknown User"
+                OwnerName = campaignModel.Owner != null ? $"{campaignModel.Owner.FirstName} {campaignModel.Owner.LastName}" : "Unknown User",
+                Donations = campaignModel.Donations.Select(d => d.ToDonationDto()).ToList()
             };
         }
 
