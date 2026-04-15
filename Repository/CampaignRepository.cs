@@ -38,7 +38,12 @@ namespace Sadkah.Backend.Repository
                     campaigns = query.IsSortDescending ? campaigns.OrderByDescending(c => c.Deadline) : campaigns.OrderBy(c => c.Deadline);
                 }
             }
-
+            
+            if (query.PageNumber > 0 && query.PageSize > 0)
+            {
+                campaigns = campaigns.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize);
+            }
+            
             return await campaigns.ToListAsync();
         }
 
