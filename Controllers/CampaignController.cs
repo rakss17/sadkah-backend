@@ -17,9 +17,9 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllCampaigns()
+        public async Task<IActionResult> GetAllCampaigns([FromQuery] QueryObject query)
         {
-            var campaigns = await _campaignRepository.GetAllCampaignsAsync();
+            var campaigns = await _campaignRepository.GetAllCampaignsAsync(query);
             var campaignDtos = campaigns.Select(c => c.ToCampaignDto());
             return Ok(campaignDtos);
         }

@@ -13,9 +13,21 @@ namespace Sadkah.Backend.Repository
             _context = context;
         }
 
-        public async Task<List<Campaign>> GetAllCampaignsAsync()
+        public async Task<List<Campaign>> GetAllCampaignsAsync(QueryObject query)
         {
-            return await _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).ToListAsync();
+            var campaigns = _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query.Title))
+            {
+                campaigns = campaigns.Where(c => c.Title.Contains(query.Title));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Description))
+            {
+                campaigns = campaigns.Where(c => c.Description.Contains(query.Description));
+            }
+
+            return await campaigns.ToListAsync();
         }
 
         public async Task<Campaign?> GetCampaignByIdAsync(int id)
