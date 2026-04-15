@@ -17,14 +17,9 @@ namespace Sadkah.Backend.Repository
         {
             var campaigns = _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(query.Title))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                campaigns = campaigns.Where(c => c.Title.Contains(query.Title));
-            }
-
-            if (!string.IsNullOrWhiteSpace(query.Description))
-            {
-                campaigns = campaigns.Where(c => c.Description.Contains(query.Description));
+                campaigns = campaigns.Where(c => c.Title.Contains(query.SearchTerm) || c.Description.Contains(query.SearchTerm));
             }
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
