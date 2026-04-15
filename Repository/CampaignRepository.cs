@@ -27,6 +27,18 @@ namespace Sadkah.Backend.Repository
                 campaigns = campaigns.Where(c => c.Description.Contains(query.Description));
             }
 
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("title", StringComparison.OrdinalIgnoreCase))
+                {
+                    campaigns = query.IsSortDescending ? campaigns.OrderByDescending(c => c.Title) : campaigns.OrderBy(c => c.Title);
+                }
+                else if (query.SortBy.Equals("deadline", StringComparison.OrdinalIgnoreCase))
+                {
+                    campaigns = query.IsSortDescending ? campaigns.OrderByDescending(c => c.Deadline) : campaigns.OrderBy(c => c.Deadline);
+                }
+            }
+
             return await campaigns.ToListAsync();
         }
 

@@ -9,5 +9,7 @@ namespace Sadkah.Backend.Helpers
     {
         public string? Title { get; set; } = null;
         public string? Description { get; set; } = null;
+        public string? SortBy { get; set; } = null;
+        public bool IsSortDescending { get; set; } = false;
     }
 }
