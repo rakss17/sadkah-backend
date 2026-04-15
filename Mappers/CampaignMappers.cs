@@ -29,10 +29,10 @@ namespace Sadkah.Backend.Mappers
             return new Campaign
             {
                 OwnerId = createDto.OwnerId,
-                Title = createDto.Title,
-                Description = createDto.Description,
+                Title = createDto.Title!,
+                Description = createDto.Description!,
                 TargetAmount = createDto.TargetAmount,
-                Deadline = createDto.Deadline,
+                Deadline = createDto.Deadline!.Value,
                 Status = Enums.CampaignStatus.Active,
                 IsVerified = false,
             };

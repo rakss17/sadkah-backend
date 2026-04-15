@@ -56,7 +56,7 @@ namespace Sadkah.Backend.Controllers
         [HttpPut("{id:int}/anonymous")]
         public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
         {
-            var updatedDonation = await _donationRepository.UpdateAnonymousDonationAsync(id, updateDto.IsAnonymous);
+            var updatedDonation = await _donationRepository.UpdateAnonymousDonationAsync(id, updateDto.IsAnonymous!.Value);
 
             if (updatedDonation == null) return NotFound();
 

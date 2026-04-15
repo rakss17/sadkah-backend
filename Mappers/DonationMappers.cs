@@ -29,7 +29,7 @@ namespace Sadkah.Backend.Mappers
                 DonorId = createDto.DonorId,
                 CampaignId = createDto.CampaignId,
                 Amount = createDto.Amount,
-                IsAnonymous = createDto.IsAnonymous,
+                IsAnonymous = createDto.IsAnonymous!.Value,
                 PaymentReference = createDto.PaymentReference
             };
         }
