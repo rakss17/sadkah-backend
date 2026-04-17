@@ -7,7 +7,7 @@ namespace Sadkah.Backend.Dtos.Campaign
 {
     public class UpdateCampaignRequestDto
     {
-        public int? OwnerId { get; set; }
+        public string? OwnerId { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public decimal? TargetAmount { get; set; }

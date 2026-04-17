@@ -8,7 +8,7 @@ namespace Sadkah.Backend.Dtos.Donation
     public class DonationDto
     {
         public int Id { get; set; }
-        public int? DonorId { get; set; }
+        public string DonorId { get; set; } = string.Empty;
         public string DonorName { get; set; } = string.Empty;
         public int CampaignId { get; set; }
         public decimal Amount { get; set; }

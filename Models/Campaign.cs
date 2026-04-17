@@ -9,7 +9,7 @@ namespace Sadkah.Backend.Models
     public class Campaign
     {
         public int Id { get; set; }
-        public int OwnerId { get; set; }
+        public string OwnerId { get; set; } = string.Empty;
         public User Owner { get; set; } = null!;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
