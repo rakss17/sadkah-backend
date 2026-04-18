@@ -9,8 +9,8 @@ namespace Sadkah.Backend.Dtos.Donation
     public class CreateDonationRequestDto
     {
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "DonorId must be a positive integer.")]
-        public int DonorId { get; set; }
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "DonorId must be between 5 and 100 characters.")]
+        public string DonorId { get; set; } = string.Empty;
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "CampaignId must be a positive integer.")]
         public int CampaignId { get; set; }

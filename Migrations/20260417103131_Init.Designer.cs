@@ -12,7 +12,7 @@ using Sadkah.Backend.Data;
 namespace Sadkah.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260206092744_Init")]
+    [Migration("20260417103131_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Sadkah.Backend.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -52,9 +52,6 @@ namespace Sadkah.Backend.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -69,8 +66,6 @@ namespace Sadkah.Backend.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Campaigns");
                 });
@@ -95,9 +90,6 @@ namespace Sadkah.Backend.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DonorId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("bit");
 
@@ -109,88 +101,22 @@ namespace Sadkah.Backend.Migrations
 
                     b.HasIndex("CampaignId");
 
-                    b.HasIndex("DonorId");
-
                     b.ToTable("Donations");
-                });
-
-            modelBuilder.Entity("Sadkah.Backend.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>
-                {
-                    b.HasOne("Sadkah.Backend.Models.User", "Owner")
-                        .WithMany("Campaigns")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Donation", b =>
                 {
                     b.HasOne("Sadkah.Backend.Models.Campaign", "Campaign")
-                        .WithMany()
+                        .WithMany("Donations")
                         .HasForeignKey("CampaignId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Sadkah.Backend.Models.User", "Donor")
-                        .WithMany("Donations")
-                        .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Campaign");
-
-                    b.Navigation("Donor");
                 });
 
-            modelBuilder.Entity("Sadkah.Backend.Models.User", b =>
+            modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>
                 {
-                    b.Navigation("Campaigns");
-
                     b.Navigation("Donations");
                 });
 #pragma warning restore 612, 618
