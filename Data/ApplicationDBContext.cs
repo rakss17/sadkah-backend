@@ -23,6 +23,18 @@ namespace Sadkah.Backend.Data
             modelBuilder.Entity<Campaign>()
                 .HasQueryFilter(c => c.DeletedAt == null);
 
+            modelBuilder.Entity<Campaign>()
+                .HasOne(c => c.Owner)
+                .WithMany(u => u.Campaigns)
+                .HasForeignKey(c => c.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Donation>()
+                .HasOne(d => d.Donor)
+                .WithMany(u => u.Donations)
+                .HasForeignKey(d => d.DonorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Donation>()
                 .HasOne(d => d.Campaign)
                 .WithMany(c => c.Donations)
