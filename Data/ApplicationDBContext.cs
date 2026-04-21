@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Sadkah.Backend.Data
@@ -12,16 +13,16 @@ namespace Sadkah.Backend.Data
         : base(dbContextOptions)
         {
         }
-
-        public DbSet<User> Users { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<Donation> Donations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<Campaign>()
                 .HasQueryFilter(c => c.DeletedAt == null);
-                
+
             modelBuilder.Entity<Campaign>()
                 .HasOne(c => c.Owner)
                 .WithMany(u => u.Campaigns)

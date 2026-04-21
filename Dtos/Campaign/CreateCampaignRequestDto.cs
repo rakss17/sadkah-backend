@@ -9,8 +9,8 @@ namespace Sadkah.Backend.Dtos.Campaign
     public class CreateCampaignRequestDto
     {
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "OwnerId must be a positive integer.")]
-        public int OwnerId { get; set; }
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "OwnerId must be between 5 and 100 characters.")]
+        public string OwnerId { get; set; } = string.Empty;
         [Required]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Title must be between 5 and 100 characters.")]
         public string? Title { get; set; }

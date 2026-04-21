@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sadkah.Backend.Data;
 
@@ -11,9 +12,11 @@ using Sadkah.Backend.Data;
 namespace Sadkah.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20260417121208_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,10 +185,6 @@ namespace Sadkah.Backend.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -200,8 +199,6 @@ namespace Sadkah.Backend.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Campaigns");
                 });
@@ -226,9 +223,6 @@ namespace Sadkah.Backend.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DonorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<bool>("IsAnonymous")
                         .HasColumnType("bit");
 
@@ -239,8 +233,6 @@ namespace Sadkah.Backend.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CampaignId");
-
-                    b.HasIndex("DonorId");
 
                     b.ToTable("Donations");
                 });
@@ -257,29 +249,12 @@ namespace Sadkah.Backend.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -304,17 +279,11 @@ namespace Sadkah.Backend.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -384,17 +353,6 @@ namespace Sadkah.Backend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>
-                {
-                    b.HasOne("Sadkah.Backend.Models.User", "Owner")
-                        .WithMany("Campaigns")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("Sadkah.Backend.Models.Donation", b =>
                 {
                     b.HasOne("Sadkah.Backend.Models.Campaign", "Campaign")
@@ -403,24 +361,11 @@ namespace Sadkah.Backend.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Sadkah.Backend.Models.User", "Donor")
-                        .WithMany("Donations")
-                        .HasForeignKey("DonorId");
-
                     b.Navigation("Campaign");
-
-                    b.Navigation("Donor");
                 });
 
             modelBuilder.Entity("Sadkah.Backend.Models.Campaign", b =>
                 {
-                    b.Navigation("Donations");
-                });
-
-            modelBuilder.Entity("Sadkah.Backend.Models.User", b =>
-                {
-                    b.Navigation("Campaigns");
-
                     b.Navigation("Donations");
                 });
 #pragma warning restore 612, 618
