@@ -12,8 +12,8 @@ using Sadkah.Backend.Data;
 namespace Sadkah.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20260417122607_Extend_Identity_User")]
-    partial class Extend_Identity_User
+    [Migration("20260417122607_ExtendIdentityUser")]
+    partial class ExtendIdentityUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

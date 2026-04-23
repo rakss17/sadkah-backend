@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Sadkah.Backend.Migrations
 {
     /// <inheritdoc />
-    public partial class Extend_Identity_User : Migration
+    public partial class ExtendIdentityUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
