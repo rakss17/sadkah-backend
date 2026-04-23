@@ -40,6 +40,33 @@ namespace Sadkah.Backend.Data
                 .WithMany(c => c.Donations)
                 .HasForeignKey(d => d.CampaignId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            List<IdentityRole> roles = new List<IdentityRole>
+            {
+                new IdentityRole 
+                {
+                    Id = "ROLE_ADMIN",
+                    Name = UserRole.Admin.ToString(), 
+                    NormalizedName = UserRole.Admin.ToString().ToUpper(),
+                    ConcurrencyStamp = "ROLE_ADMIN" 
+                },
+                new IdentityRole 
+                {
+                    Id = "ROLE_CAMPAIGN_OWNER", 
+                    Name = UserRole.CampaignOwner.ToString(), 
+                    NormalizedName = UserRole.CampaignOwner.ToString().ToUpper(),
+                    ConcurrencyStamp = "ROLE_CAMPAIGN_OWNER"
+                },
+                new IdentityRole 
+                { 
+                    Id = "ROLE_DONOR",
+                    Name = UserRole.Donor.ToString(), 
+                    NormalizedName = UserRole.Donor.ToString().ToUpper(),
+                    ConcurrencyStamp = "ROLE_DONOR"
+                }
+            };
+            modelBuilder.Entity<IdentityRole>().HasData(roles);
+
         }
 
     }
