@@ -4,6 +4,7 @@ namespace Sadkah.Backend.Enums
     {
         Admin,
         Donor,
-        CampaignOwner
+        CampaignOwner,
+        Unassigned
     }
 }

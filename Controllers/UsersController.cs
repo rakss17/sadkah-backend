@@ -29,14 +29,14 @@ namespace Sadkah.Backend.Controllers
                     Email = registerDto.Email,
                     FirstName = registerDto.FirstName ?? string.Empty,
                     LastName = registerDto.LastName ?? string.Empty,
-                    Role = registerDto.Role
+                    Role = registerDto.Role ?? UserRole.Unassigned
                 };
 
                 var createdUser = await _userManager.CreateAsync(user, registerDto.Password);
 
                 if (createdUser.Succeeded)
                 {
-                    var addToRole = await _userManager.AddToRoleAsync(user, registerDto.Role.ToString());
+                    var addToRole = await _userManager.AddToRoleAsync(user, registerDto.Role.ToString() ?? UserRole.Unassigned.ToString());
                     if (addToRole.Succeeded)
                     {
                         return Ok(new { message = "User registered successfully." });

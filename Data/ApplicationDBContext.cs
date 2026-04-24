@@ -63,6 +63,13 @@ namespace Sadkah.Backend.Data
                     Name = UserRole.Donor.ToString(), 
                     NormalizedName = UserRole.Donor.ToString().ToUpper(),
                     ConcurrencyStamp = "ROLE_DONOR"
+                },
+                new IdentityRole 
+                { 
+                    Id = "ROLE_UNASSIGNED",
+                    Name = UserRole.Unassigned.ToString(), 
+                    NormalizedName = UserRole.Unassigned.ToString().ToUpper(),
+                    ConcurrencyStamp = "ROLE_UNASSIGNED"
                 }
             };
             modelBuilder.Entity<IdentityRole>().HasData(roles);

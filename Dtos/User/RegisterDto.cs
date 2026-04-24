@@ -24,7 +24,7 @@ namespace Sadkah.Backend.Dtos.User
         [Required]
         public string? LastName { get; set; } = string.Empty;
         [Required]
-        public UserRole Role { get; set; }
+        public UserRole? Role { get; set; }
 
     }
 }
