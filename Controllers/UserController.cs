@@ -10,12 +10,12 @@ namespace Sadkah.Backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
 
-        public UsersController(UserManager<User> userManager, ITokenService tokenService)
+        public UserController(UserManager<User> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
