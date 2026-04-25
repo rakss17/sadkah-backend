@@ -14,11 +14,40 @@ namespace Sadkah.Backend.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly ITokenService _tokenService;
+        private readonly SignInManager<User> _signInManager;
 
-        public UserController(UserManager<User> userManager, ITokenService tokenService)
+        public UserController(UserManager<User> userManager, ITokenService tokenService, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _tokenService = tokenService;
+            _signInManager = signInManager;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginDto loginDto)
+        {
+            try {
+                var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+                if (user == null) return Unauthorized();
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+                if (!result.Succeeded) return Unauthorized();
+
+                return Ok(
+                    new NewUserDto
+                    {
+                        Email = user.Email ?? string.Empty,
+                        FullName = user.FirstName + " " + user.LastName,
+                        Token = _tokenService.CreateToken(user)
+                    }
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("register")]
