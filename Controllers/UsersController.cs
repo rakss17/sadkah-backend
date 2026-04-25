@@ -13,10 +13,12 @@ namespace Sadkah.Backend.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly ITokenService _tokenService;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, ITokenService tokenService)
         {
             _userManager = userManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
@@ -39,7 +41,14 @@ namespace Sadkah.Backend.Controllers
                     var addToRole = await _userManager.AddToRoleAsync(user, registerDto.Role.ToString() ?? UserRole.Unassigned.ToString());
                     if (addToRole.Succeeded)
                     {
-                        return Ok(new { message = "User registered successfully." });
+                        return Ok(
+                            new NewUserDto
+                            {
+                                Email = user.Email ?? string.Empty,
+                                FullName = user.FirstName + " " + user.LastName,
+                                Token = _tokenService.CreateToken(user)
+                            }
+                        );
                     }
                     else
                     {
