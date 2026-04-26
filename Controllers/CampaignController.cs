@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sadkah.Backend.Controllers
@@ -17,6 +18,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCampaigns([FromQuery] QueryObject query)
         {
             var campaigns = await _campaignRepository.GetAllCampaignsAsync(query);
@@ -25,6 +27,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetCampaignById([FromRoute] int id)
         {
             var campaign = await _campaignRepository.GetCampaignByIdAsync(id);
@@ -33,6 +36,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignRequestDto createDto)
         {
             var campaign = createDto.ToCampaignFromCreateDto();
@@ -49,6 +53,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPut("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
         {
             var updatedCampaign = await _campaignRepository.UpdateCampaignAsync(id, updateDto);
@@ -59,6 +64,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> DeleteCampaign([FromRoute] int id)
         {
             var deletedCampaign = await _campaignRepository.DeleteCampaignAsync(id);

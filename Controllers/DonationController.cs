@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Sadkah.Backend.Controllers
@@ -19,6 +20,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllDonations()
         {
             var donations = await _donationRepository.GetAllDonationsAsync();
@@ -27,6 +29,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> GetDonationById([FromRoute] int id)
         {
             var donation = await _donationRepository.GetDonationByIdAsync(id);
@@ -35,6 +38,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateDonation([FromBody] CreateDonationRequestDto createDto)
         {
             var isCampaignExisting = await _campaignRepository.IsCampaignExistingAsync(createDto.CampaignId);
@@ -54,6 +58,7 @@ namespace Sadkah.Backend.Controllers
         }
 
         [HttpPut("{id:int}/anonymous")]
+        [Authorize]
         public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
         {
             var updatedDonation = await _donationRepository.UpdateAnonymousDonationAsync(id, updateDto.IsAnonymous!.Value);
