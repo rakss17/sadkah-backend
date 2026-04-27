@@ -8,10 +8,10 @@ namespace Sadkah.Backend.Interfaces
     public interface ICampaignRepository
     {
         Task<List<Campaign>> GetAllCampaignsAsync(QueryObject query);
-        Task<Campaign?> GetCampaignByIdAsync(int id);
+        Task<Campaign?> GetCampaignByIdAsync(Guid id);
         Task<Campaign> CreateCampaignAsync(Campaign campaign);
-        Task<Campaign?> UpdateCampaignAsync(int id, UpdateCampaignRequestDto updatedCampaign);
-        Task<Campaign?> DeleteCampaignAsync(int id);
-        Task<bool> IsCampaignExistingAsync(int id);
+        Task<Campaign?> UpdateCampaignAsync(Guid id, UpdateCampaignRequestDto updatedCampaign);
+        Task<Campaign?> DeleteCampaignAsync(Guid id);
+        Task<bool> IsCampaignExistingAsync(Guid id);
     }
 }

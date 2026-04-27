@@ -18,7 +18,7 @@ namespace Sadkah.Backend.Repository
             return await _context.Donations.Include(d => d.Donor).ToListAsync();
         }
 
-        public async Task<Donation?> GetDonationByIdAsync(int id)
+        public async Task<Donation?> GetDonationByIdAsync(Guid id)
         {
             return await _context.Donations.Include(d => d.Donor).FirstOrDefaultAsync(d => d.Id == id);
         }
@@ -33,7 +33,7 @@ namespace Sadkah.Backend.Repository
             return createdDonation!;
         }
 
-        public async Task<Donation?> UpdateAnonymousDonationAsync(int id, bool isAnonymous)
+        public async Task<Donation?> UpdateAnonymousDonationAsync(Guid id, bool isAnonymous)
         {
             var donationModel = await _context.Donations.FirstOrDefaultAsync(d => d.Id == id);
 
