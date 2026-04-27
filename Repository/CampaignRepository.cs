@@ -42,7 +42,7 @@ namespace Sadkah.Backend.Repository
             return await campaigns.ToListAsync();
         }
 
-        public async Task<Campaign?> GetCampaignByIdAsync(int id)
+        public async Task<Campaign?> GetCampaignByIdAsync(Guid id)
         {
             return await _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).FirstOrDefaultAsync(c => c.Id == id);
         }
@@ -58,7 +58,7 @@ namespace Sadkah.Backend.Repository
 
         }
 
-        public async Task<Campaign?> UpdateCampaignAsync(int id, UpdateCampaignRequestDto updateCampaignDto)
+        public async Task<Campaign?> UpdateCampaignAsync(Guid id, UpdateCampaignRequestDto updateCampaignDto)
         {
             var existingCampaign = await _context.Campaigns.Include(c => c.Owner).FirstOrDefaultAsync(c => c.Id == id);
 
@@ -75,7 +75,7 @@ namespace Sadkah.Backend.Repository
             return existingCampaign;
         }
 
-        public async Task<Campaign?> DeleteCampaignAsync(int id)
+        public async Task<Campaign?> DeleteCampaignAsync(Guid id)
         {
             var campaign = await _context.Campaigns.FirstOrDefaultAsync(c => c.Id == id);
             if (campaign == null) return null;
@@ -88,7 +88,7 @@ namespace Sadkah.Backend.Repository
 
         }
 
-        public async Task<bool> IsCampaignExistingAsync(int id)
+        public async Task<bool> IsCampaignExistingAsync(Guid id)
         {
             return await _context.Campaigns.AnyAsync(c => c.Id == id);
         }

@@ -28,9 +28,9 @@ namespace Sadkah.Backend.Controllers
             return Ok(donationDtos);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> GetDonationById([FromRoute] int id)
+        public async Task<IActionResult> GetDonationById([FromRoute] Guid id)
         {
             var donation = await _donationRepository.GetDonationByIdAsync(id);
             if (donation == null) return NotFound();
@@ -57,9 +57,9 @@ namespace Sadkah.Backend.Controllers
             ); 
         }
 
-        [HttpPut("{id:int}/anonymous")]
+        [HttpPut("{id:guid}/anonymous")]
         [Authorize]
-        public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] int id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
+        public async Task<IActionResult> UpdateAnonymousDonation([FromRoute] Guid id, [FromBody] UpdateAnonymousDonationRequestDto updateDto)
         {
             var updatedDonation = await _donationRepository.UpdateAnonymousDonationAsync(id, updateDto.IsAnonymous!.Value);
 

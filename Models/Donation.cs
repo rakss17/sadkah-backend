@@ -8,10 +8,10 @@ namespace Sadkah.Backend.Models
 {
     public class Donation
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string DonorId { get; set; } = string.Empty;
         public User? Donor { get; set; }
-        public int CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
         public Campaign Campaign { get; set; } = null!;
         [Column(TypeName = "decimal(18,2)")]
         public decimal Amount { get; set; }

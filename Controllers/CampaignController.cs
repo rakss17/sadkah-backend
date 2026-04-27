@@ -26,9 +26,9 @@ namespace Sadkah.Backend.Controllers
             return Ok(campaignDtos);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> GetCampaignById([FromRoute] int id)
+        public async Task<IActionResult> GetCampaignById([FromRoute] Guid id)
         {
             var campaign = await _campaignRepository.GetCampaignByIdAsync(id);
             if (campaign == null) return NotFound();
@@ -52,9 +52,9 @@ namespace Sadkah.Backend.Controllers
             );
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> UpdateCampaign([FromRoute] int id, [FromBody] UpdateCampaignRequestDto updateDto)
+        public async Task<IActionResult> UpdateCampaign([FromRoute] Guid id, [FromBody] UpdateCampaignRequestDto updateDto)
         {
             var updatedCampaign = await _campaignRepository.UpdateCampaignAsync(id, updateDto);
 
@@ -63,9 +63,9 @@ namespace Sadkah.Backend.Controllers
             return Ok(updatedCampaign.ToCampaignFromUpdateResponseDto());
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:guid}")]
         [Authorize]
-        public async Task<IActionResult> DeleteCampaign([FromRoute] int id)
+        public async Task<IActionResult> DeleteCampaign([FromRoute] Guid id)
         {
             var deletedCampaign = await _campaignRepository.DeleteCampaignAsync(id);
             

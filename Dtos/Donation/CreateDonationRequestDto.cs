@@ -12,8 +12,7 @@ namespace Sadkah.Backend.Dtos.Donation
         [StringLength(100, MinimumLength = 5, ErrorMessage = "DonorId must be between 5 and 100 characters.")]
         public string DonorId { get; set; } = string.Empty;
         [Required]
-        [Range(1, int.MaxValue, ErrorMessage = "CampaignId must be a positive integer.")]
-        public int CampaignId { get; set; }
+        public Guid CampaignId { get; set; }
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Amount must be a positive decimal.")]
         public decimal Amount { get; set; }
