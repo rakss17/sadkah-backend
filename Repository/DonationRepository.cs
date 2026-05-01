@@ -13,9 +13,28 @@ namespace Sadkah.Backend.Repository
             _context = context;
         }
 
-        public async Task<List<Donation>> GetAllDonationsAsync()
+        public async Task<PagedResult<Donation>> GetAllDonationsAsync(QueryObject query)
         {
-            return await _context.Donations.Include(d => d.Donor).ToListAsync();
+            var donationsQuery = _context.Donations.Include(d => d.Donor).AsQueryable();
+
+            var totalCount = await donationsQuery.CountAsync();
+
+            var pageSize = query.PageSize > 0 ? query.PageSize : 10;
+            var pageNumber = query.PageNumber > 0 ? query.PageNumber : 1;
+
+            var items = await donationsQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Donation>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
         }
 
         public async Task<Donation?> GetDonationByIdAsync(Guid id)
