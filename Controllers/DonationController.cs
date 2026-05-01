@@ -21,11 +21,23 @@ namespace Sadkah.Backend.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetAllDonations()
+        public async Task<IActionResult> GetAllDonations([FromQuery] QueryObject query)
         {
-            var donations = await _donationRepository.GetAllDonationsAsync();
-            var donationDtos = donations.Select(d => d.ToDonationDto());
-            return Ok(donationDtos);
+            var donations = await _donationRepository.GetAllDonationsAsync(query);
+            var donationDtos = donations.Items.Select(d => d.ToDonationDto());
+            return Ok(new
+            {
+                success = true,
+                message = "Donations retrieved successfully.",
+                data = donationDtos,
+                metadata = new
+                {
+                    totalCount = donations.TotalCount,
+                    pageSize = donations.PageSize,
+                    currentPage = donations.CurrentPage,
+                    totalPages = donations.TotalPages
+                }
+            });
         }
 
         [HttpGet("{id:guid}")]
@@ -34,7 +46,12 @@ namespace Sadkah.Backend.Controllers
         {
             var donation = await _donationRepository.GetDonationByIdAsync(id);
             if (donation == null) return NotFound();
-            return Ok(donation.ToDonationDto());
+            return Ok(new
+            {
+                success = true,
+                message = "Donation retrieved successfully.",
+                data = donation.ToDonationDto()
+            });
         }
 
         [HttpPost]
@@ -53,7 +70,12 @@ namespace Sadkah.Backend.Controllers
             return CreatedAtAction(
                 nameof(GetDonationById),
                 new { id = createdDonation.Id },
-                createdDonation.ToDonationDto()
+                new
+                {
+                    success = true,
+                    message = "Donation created successfully.",
+                    data = createdDonation.ToDonationDto()
+                }
             ); 
         }
 
@@ -65,7 +87,12 @@ namespace Sadkah.Backend.Controllers
 
             if (updatedDonation == null) return NotFound();
 
-            return Ok(new { message = "Donation anonymous status updated successfully." });
+            return Ok(new
+            {
+                success = true,
+                message = "Donation anonymous status updated successfully.",
+                data = updatedDonation.ToDonationDto()
+            });
         }   
     }
 }

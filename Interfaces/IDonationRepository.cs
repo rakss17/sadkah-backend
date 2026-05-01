@@ -7,7 +7,7 @@ namespace Sadkah.Backend.Interfaces
 {
     public interface IDonationRepository
     {
-        Task<List<Donation>> GetAllDonationsAsync();
+        Task<PagedResult<Donation>> GetAllDonationsAsync(QueryObject query);
         Task<Donation?> GetDonationByIdAsync(Guid id);
         Task<Donation> CreateDonationAsync(Donation donation);
         Task<Donation?> UpdateAnonymousDonationAsync(Guid id, bool isAnonymous);

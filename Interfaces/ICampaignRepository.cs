@@ -7,7 +7,7 @@ namespace Sadkah.Backend.Interfaces
 {
     public interface ICampaignRepository
     {
-        Task<List<Campaign>> GetAllCampaignsAsync(QueryObject query);
+        Task<PagedResult<Campaign>> GetAllCampaignsAsync(QueryObject query);
         Task<Campaign?> GetCampaignByIdAsync(Guid id);
         Task<Campaign> CreateCampaignAsync(Campaign campaign);
         Task<Campaign?> UpdateCampaignAsync(Guid id, UpdateCampaignRequestDto updatedCampaign);
