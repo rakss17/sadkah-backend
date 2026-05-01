@@ -13,33 +13,45 @@ namespace Sadkah.Backend.Repository
             _context = context;
         }
 
-        public async Task<List<Campaign>> GetAllCampaignsAsync(QueryObject query)
+        public async Task<PagedResult<Campaign>> GetAllCampaignsAsync(QueryObject query)
         {
-            var campaigns = _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).AsQueryable();
+            var campaignsQuery = _context.Campaigns.Include(c => c.Owner).Include(c => c.Donations).AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                campaigns = campaigns.Where(c => c.Title.Contains(query.SearchTerm) || c.Description.Contains(query.SearchTerm));
+                campaignsQuery = campaignsQuery.Where(c => c.Title.Contains(query.SearchTerm) || c.Description.Contains(query.SearchTerm));
             }
 
             if (!string.IsNullOrWhiteSpace(query.SortBy))
             {
                 if (query.SortBy.Equals("title", StringComparison.OrdinalIgnoreCase))
                 {
-                    campaigns = query.IsSortDescending ? campaigns.OrderByDescending(c => c.Title) : campaigns.OrderBy(c => c.Title);
+                    campaignsQuery = query.IsSortDescending ? campaignsQuery.OrderByDescending(c => c.Title) : campaignsQuery.OrderBy(c => c.Title);
                 }
                 else if (query.SortBy.Equals("deadline", StringComparison.OrdinalIgnoreCase))
                 {
-                    campaigns = query.IsSortDescending ? campaigns.OrderByDescending(c => c.Deadline) : campaigns.OrderBy(c => c.Deadline);
+                    campaignsQuery = query.IsSortDescending ? campaignsQuery.OrderByDescending(c => c.Deadline) : campaignsQuery.OrderBy(c => c.Deadline);
                 }
             }
             
-            if (query.PageNumber > 0 && query.PageSize > 0)
+            var totalCount = await campaignsQuery.CountAsync();
+
+            var pageSize = query.PageSize > 0 ? query.PageSize : 10;
+            var pageNumber = query.PageNumber > 0 ? query.PageNumber : 1;
+
+            var items = await campaignsQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return new PagedResult<Campaign>
             {
-                campaigns = campaigns.Skip((query.PageNumber - 1) * query.PageSize).Take(query.PageSize);
-            }
-            
-            return await campaigns.ToListAsync();
+                Items = items,
+                TotalCount = totalCount,
+                PageSize = pageSize,
+                CurrentPage = pageNumber,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+            };
         }
 
         public async Task<Campaign?> GetCampaignByIdAsync(Guid id)

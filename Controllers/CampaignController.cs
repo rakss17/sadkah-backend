@@ -22,8 +22,20 @@ namespace Sadkah.Backend.Controllers
         public async Task<IActionResult> GetAllCampaigns([FromQuery] QueryObject query)
         {
             var campaigns = await _campaignRepository.GetAllCampaignsAsync(query);
-            var campaignDtos = campaigns.Select(c => c.ToCampaignDto());
-            return Ok(campaignDtos);
+            var campaignDtos = campaigns.Items.Select(c => c.ToCampaignDto());
+            return Ok(new
+            {
+                success = true,
+                message = "Campaigns retrieved successfully.",
+                data = campaignDtos,
+                metadata = new
+                {
+                    totalCount = campaigns.TotalCount,
+                    pageSize = campaigns.PageSize,
+                    currentPage = campaigns.CurrentPage,
+                    totalPages = campaigns.TotalPages
+                }
+            });
         }
 
         [HttpGet("{id:guid}")]
@@ -32,7 +44,12 @@ namespace Sadkah.Backend.Controllers
         {
             var campaign = await _campaignRepository.GetCampaignByIdAsync(id);
             if (campaign == null) return NotFound();
-            return Ok(campaign.ToCampaignDto());
+            return Ok(new
+            {
+                success = true,
+                message = "Campaign retrieved successfully.",
+                data = campaign.ToCampaignDto(),
+            });
         }
 
         [HttpPost]
@@ -48,7 +65,12 @@ namespace Sadkah.Backend.Controllers
             return CreatedAtAction(
                 nameof(GetCampaignById),
                 new { id = createdCampaign.Id },
-                createdCampaign.ToCampaignDto()
+                new
+                {
+                    success = true,
+                    message = "Campaign created successfully.",
+                    data = createdCampaign.ToCampaignDto()
+                }
             );
         }
 
@@ -60,7 +82,12 @@ namespace Sadkah.Backend.Controllers
 
             if (updatedCampaign == null) return NotFound();
 
-            return Ok(updatedCampaign.ToCampaignFromUpdateResponseDto());
+            return Ok(new
+            {
+                success = true,
+                message = "Campaign updated successfully.",
+                data = updatedCampaign.ToCampaignFromUpdateResponseDto()
+            });
         }
 
         [HttpDelete("{id:guid}")]
@@ -71,7 +98,12 @@ namespace Sadkah.Backend.Controllers
             
             if (deletedCampaign == null) return NotFound();
 
-            return Ok(new { message = "Campaign deleted successfully." });
+            return Ok(new
+            {
+                success = true,
+                message = "Campaign deleted successfully.",
+                data = deletedCampaign.ToCampaignDto()
+            });
         }
     }
 }
