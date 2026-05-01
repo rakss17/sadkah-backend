@@ -35,14 +35,18 @@ namespace Sadkah.Backend.Controllers
 
                 if (!result.Succeeded) return Unauthorized();
 
-                return Ok(
-                    new NewUserDto
+                return Ok(new
+                {
+                    success = true,
+                    message = "Login successful.",
+                    data = new NewUserDto
                     {
                         Email = user.Email ?? string.Empty,
                         FullName = user.FirstName + " " + user.LastName,
                         Token = _tokenService.CreateToken(user)
                     }
-                );
+                });
+                    
             }
             catch (Exception ex)
             {
@@ -70,14 +74,17 @@ namespace Sadkah.Backend.Controllers
                     var addToRole = await _userManager.AddToRoleAsync(user, registerDto.Role.ToString() ?? UserRole.Unassigned.ToString());
                     if (addToRole.Succeeded)
                     {
-                        return Ok(
-                            new NewUserDto
+                        return Ok(new
+                        {
+                            success = true,
+                            message = "User registered successfully.",
+                            data = new NewUserDto
                             {
                                 Email = user.Email ?? string.Empty,
                                 FullName = user.FirstName + " " + user.LastName,
                                 Token = _tokenService.CreateToken(user)
                             }
-                        );
+                        });
                     }
                     else
                     {
