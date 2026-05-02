@@ -29,11 +29,19 @@ namespace Sadkah.Backend.Controllers
             try {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-                if (user == null) return Unauthorized();
+                if (user == null) return Unauthorized(new
+                {
+                    success = false,
+                    message = "Invalid email or password.",
+                });
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-                if (!result.Succeeded) return Unauthorized();
+                if (!result.Succeeded) return Unauthorized(new
+                {
+                    success = false,
+                    message = "Invalid email or password.",
+                });
 
                 return Ok(new
                 {
@@ -50,7 +58,12 @@ namespace Sadkah.Backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                Console.WriteLine($"Error during login: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Internal server error during login.",
+                });
             }
         }
 
@@ -88,16 +101,31 @@ namespace Sadkah.Backend.Controllers
                     }
                     else
                     {
-                        return StatusCode(500, addToRole.Errors.Select(e => e.Description));
+                        Console.WriteLine($"Error adding user to role: {string.Join(", ", addToRole.Errors.Select(e => e.Description))}");
+                        return StatusCode(500, new
+                        {
+                            success = false,
+                            message = "Internal server error while adding user to role.",
+                        });
                     }
                 }
                 else
                 {
-                    return StatusCode(500, createdUser.Errors.Select(e => e.Description));
+                    Console.WriteLine($"Error creating user: {string.Join(", ", createdUser.Errors.Select(e => e.Description))}");
+                    return StatusCode(500, new
+                    {
+                        success = false,
+                        message = "Internal server error while creating user.",
+                    });
                 }
 
             } catch (Exception ex) {
-                return StatusCode(500, ex.Message);
+                Console.WriteLine($"Error during registration: {ex.Message}");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Internal server error during registration.",
+                });
             }
         }
     }
