@@ -54,7 +54,8 @@ builder.Services.AddAuthentication(options => {
 
             return context.Response.WriteAsJsonAsync(new
             {
-                message = "Unauthorized: Please login first."
+                success = false,
+                message = "You are not authorized to access this resource. Please login first."
             });
         },
         OnForbidden = context =>
@@ -64,7 +65,8 @@ builder.Services.AddAuthentication(options => {
 
             return context.Response.WriteAsJsonAsync(new
             {
-                message = "Forbidden: You don’t have permission to access this."
+                success = false,
+                message = "You don’t have permission to access this. Please contact the administrator if you think this is a mistake."
             });
         }
     };
