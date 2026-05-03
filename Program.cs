@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Sadkah.Backend.Repository;
 using Sadkah.Backend.Services;
@@ -69,6 +70,27 @@ builder.Services.AddAuthentication(options => {
                 message = "You don’t have permission to access this. Please contact the administrator if you think this is a mistake."
             });
         }
+    };
+});
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(x => x.Value?.Errors.Count > 0)
+            .Select(x => new
+            {
+                field = x.Key,
+                messages = x.Value?.Errors.Select(e => e.ErrorMessage)
+            });
+
+        return new BadRequestObjectResult(new
+        {
+            success = false,
+            message = "Validation failed.",
+            errors = errors.ToArray()
+        });
     };
 });
 
