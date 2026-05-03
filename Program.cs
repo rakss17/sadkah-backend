@@ -55,7 +55,7 @@ builder.Services.AddAuthentication(options => {
             return context.Response.WriteAsJsonAsync(new
             {
                 success = false,
-                message = "You are not authorized to access this resource. Please login first."
+                message = "You are not authorized to access this resource, or your token is invalid or has expired. Please log in first."
             });
         },
         OnForbidden = context =>
