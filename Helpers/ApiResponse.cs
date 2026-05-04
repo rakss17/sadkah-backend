@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Sadkah.Backend.Helpers
 {
@@ -9,8 +10,11 @@ namespace Sadkah.Backend.Helpers
     {
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public T? Data { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object? Errors { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object? Metadata { get; set; }
 
         public static ApiResponse<T> SuccessResponse(T data, string message = "", object? metadata = null)
