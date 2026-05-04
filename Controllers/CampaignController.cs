@@ -28,13 +28,15 @@ namespace Sadkah.Backend.Controllers
                 
                 if (!campaignDtos.Any()) return NotFound(ApiResponse<object>.FailResponse("Campaign not found."));
 
-                return Ok(ApiResponse<IEnumerable<CampaignDto>>.SuccessResponse(campaignDtos, "Campaigns retrieved successfully.", new
+                var metadata = new
                 {
                     totalCount = campaigns.TotalCount,
                     pageSize = campaigns.PageSize,
                     currentPage = campaigns.CurrentPage,
                     totalPages = campaigns.TotalPages
-                }));
+                }; 
+
+                return Ok(ApiResponse<IEnumerable<CampaignDto>>.SuccessResponse(campaignDtos, "Campaigns retrieved successfully.", metadata));
             }
             catch (Exception ex)
             {
