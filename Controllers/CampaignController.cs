@@ -25,33 +25,21 @@ namespace Sadkah.Backend.Controllers
             {
                 var campaigns = await _campaignRepository.GetAllCampaignsAsync(query);
                 var campaignDtos = campaigns.Items.Select(c => c.ToCampaignDto());
-                if (!campaignDtos.Any()) return NotFound(new
+                
+                if (!campaignDtos.Any()) return NotFound(ApiResponse<object>.FailResponse("Campaign not found."));
+
+                return Ok(ApiResponse<IEnumerable<CampaignDto>>.SuccessResponse(campaignDtos, "Campaigns retrieved successfully.", new
                 {
-                    success = false,
-                    message = "No campaigns found.",
-                });
-                return Ok(new
-                {
-                    success = true,
-                    message = "Campaigns retrieved successfully.",
-                    data = campaignDtos,
-                    metadata = new
-                    {
-                        totalCount = campaigns.TotalCount,
-                        pageSize = campaigns.PageSize,
-                        currentPage = campaigns.CurrentPage,
-                        totalPages = campaigns.TotalPages
-                    }
-                });
+                    totalCount = campaigns.TotalCount,
+                    pageSize = campaigns.PageSize,
+                    currentPage = campaigns.CurrentPage,
+                    totalPages = campaigns.TotalPages
+                }));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error retrieving campaigns: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    success = false,
-                    message = "Internal server error while retrieving campaigns.",
-                });
+                return StatusCode(500, ApiResponse<object>.FailResponse("Internal server error while retrieving campaigns."));
             }
         }
 
@@ -62,26 +50,13 @@ namespace Sadkah.Backend.Controllers
             try
             {
                 var campaign = await _campaignRepository.GetCampaignByIdAsync(id);
-                if (campaign == null) return NotFound(new
-                {
-                    success = false,
-                    message = "Campaign not found.",
-                });
-                return Ok(new
-                {
-                    success = true,
-                    message = "Campaign retrieved successfully.",
-                    data = campaign.ToCampaignDto(),
-                });
+                if (campaign == null) return NotFound(ApiResponse<object>.FailResponse("Campaign not found."));
+                return Ok(ApiResponse<CampaignDto>.SuccessResponse(campaign.ToCampaignDto(), "Campaign retrieved successfully."));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error retrieving campaign: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    success = false,
-                    message = "Internal server error while retrieving the campaign.",
-                });
+                return StatusCode(500, ApiResponse<object>.FailResponse("Internal server error while retrieving the campaign."));
             }
 
         }
@@ -96,31 +71,18 @@ namespace Sadkah.Backend.Controllers
             
                 var createdCampaign = await _campaignRepository.CreateCampaignAsync(campaign);
 
-                if (createdCampaign == null) return NotFound(new
-                {
-                    success = false,
-                    message = "Failed to create campaign.",
-                });
+                if (createdCampaign == null) return NotFound(ApiResponse<object>.FailResponse("Failed to create campaign."));
 
                 return CreatedAtAction(
                     nameof(GetCampaignById),
                     new { id = createdCampaign.Id },
-                    new
-                    {
-                        success = true,
-                        message = "Campaign created successfully.",
-                        data = createdCampaign.ToCampaignDto()
-                    }
+                    ApiResponse<CampaignDto>.SuccessResponse(createdCampaign.ToCampaignDto(), "Campaign created successfully.")
                 );
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating campaign: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    success = false,
-                    message = "Internal server error while creating the campaign.",
-                });
+                return StatusCode(500, ApiResponse<object>.FailResponse("Internal server error while creating the campaign."));
             }
            
         }
@@ -133,28 +95,14 @@ namespace Sadkah.Backend.Controllers
             {
                 var updatedCampaign = await _campaignRepository.UpdateCampaignAsync(id, updateDto);
 
-                if (updatedCampaign == null) return NotFound(new
-                    {
-                        success = false,
-                        message = "Campaign not found.",
-                    }
-                );
+                if (updatedCampaign == null) return NotFound(ApiResponse<object>.FailResponse("Campaign not found."));
 
-                return Ok(new
-                {
-                    success = true,
-                    message = "Campaign updated successfully.",
-                    data = updatedCampaign.ToCampaignFromUpdateResponseDto()
-                });
+                return Ok(ApiResponse<CampaignDto>.SuccessResponse(updatedCampaign.ToCampaignDto(), "Campaign updated successfully."));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating campaign: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    success = false,
-                    message = "Internal server error while updating the campaign.",
-                });
+                return StatusCode(500, ApiResponse<object>.FailResponse("Internal server error while updating the campaign."));
             }
             
         }
@@ -167,27 +115,14 @@ namespace Sadkah.Backend.Controllers
             {
                 var deletedCampaign = await _campaignRepository.DeleteCampaignAsync(id);
             
-                if (deletedCampaign == null) return NotFound(new
-                {
-                    success = false,
-                    message = "Campaign not found.",
-                });
+                if (deletedCampaign == null) return NotFound(ApiResponse<object>.FailResponse("Campaign not found."));
 
-                return Ok(new
-                {
-                    success = true,
-                    message = "Campaign deleted successfully.",
-                    data = deletedCampaign.ToCampaignDto()
-                });
+                return Ok(ApiResponse<CampaignDto>.SuccessResponse(deletedCampaign.ToCampaignDto(), "Campaign deleted successfully."));
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error deleting campaign: {ex.Message}");
-                return StatusCode(500, new
-                {
-                    success = false,
-                    message = "Internal server error while deleting the campaign.",
-                });
+                return StatusCode(500, ApiResponse<object>.FailResponse("Internal server error while deleting the campaign."));
             }
 
         }
