@@ -67,10 +67,8 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
 
-          # Deployment files to upload
-          source: |
-            docker-compose.yml
-            Caddyfile
+          # Deployment files to upload (comma-separated, not one-per-line)
+          source: "docker-compose.yml,Caddyfile"
 
           # Directory on the VPS
           target: /sadkah-platform # e.g. /opt/myapp
