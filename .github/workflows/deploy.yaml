@@ -70,8 +70,8 @@ jobs:
           # Deployment files to upload (comma-separated, not one-per-line)
           source: "docker-compose.yml,Caddyfile"
 
-          # Directory on the VPS
-          target: /sadkah-platform # e.g. /opt/myapp
+          # Directory on the VPS (must be writable by VPS_USERNAME, a non-root user)
+          target: sadkah-platform # relative to VPS_USERNAME's home directory
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -81,9 +81,9 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
 
           script: |
-            mkdir -p /sadkah-platform
+            mkdir -p ~/sadkah-platform
 
-            cd /sadkah-platform
+            cd ~/sadkah-platform
 
             # Generate .env from GitHub Secrets
             cat > .env <<EOF
