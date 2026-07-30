@@ -1,0 +1,63 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-C", "-S", "localhost", "-U", "sa", "-P", "${MSSQL_SA_PASSWORD}", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  sadkah-api:
+    build:
+      context: ./Sadkah.API
+    image: bohariambulo17/sadkah-platform-api:latest
+    restart: unless-stopped
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=sadkahdb;User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+      JWT__Issuer: ${API_PUBLIC_URL}
+      JWT__Audience: ${API_PUBLIC_URL}
+      JWT__SigningKey: ${JWT_SIGNING_KEY}
+      Cloudinary__CloudName: ${CLOUDINARY_CLOUD_NAME}
+      Cloudinary__ApiKey: ${CLOUDINARY_API_KEY}
+      Cloudinary__ApiSecret: ${CLOUDINARY_API_SECRET}
+
+  sadkah-web:
+    build:
+      context: ./Sadkah.Web
+    image: bohariambulo17/sadkah-platform-web:latest
+    restart: unless-stopped
+    depends_on:
+      - sadkah-api
+    environment:
+      Api__BaseUrl: "http://sadkah-api:8080"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      WEB_DOMAIN: ${WEB_DOMAIN}
+      API_DOMAIN: ${API_DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - sadkah-api
+      - sadkah-web
+
+volumes:
+  sqlserver-data:
+  caddy-data:
+  caddy-config:

@@ -7,3 +7,5 @@
 **/PublishProfiles/**
 **/Logs
 **/.config/dotnet-tools.json
+.env
+.env.local

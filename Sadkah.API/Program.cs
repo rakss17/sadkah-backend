@@ -26,6 +26,12 @@ builder.AddIdentityServices()
 
 var app = builder.Build();
 
+// Runtime image doesn't ship dotnet-ef, so apply pending migrations here instead.
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<ApplicationDBContext>().Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

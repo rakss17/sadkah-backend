@@ -1,0 +1,7 @@
+{$WEB_DOMAIN} {
+    reverse_proxy sadkah-web:8080
+}
+
+{$API_DOMAIN} {
+    reverse_proxy sadkah-api:8080
+}

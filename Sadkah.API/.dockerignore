@@ -1,0 +1,7 @@
+bin/
+obj/
+.vs/
+*.user
+tessdata/eng.traineddata
+.env
+.env.local
