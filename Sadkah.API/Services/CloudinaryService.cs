@@ -23,6 +23,11 @@ public class CloudinaryService : ICloudinaryService
             Folder = directory
         };
 
-        return await _cloudinary.UploadAsync(uploadParams);
+        var result = await _cloudinary.UploadAsync(uploadParams);
+
+        if (result.Error != null)
+            throw new InvalidOperationException($"Cloudinary upload failed: {result.Error.Message}");
+
+        return result;
     }
 }
